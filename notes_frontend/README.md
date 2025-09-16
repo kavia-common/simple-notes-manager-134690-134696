@@ -1,82 +1,65 @@
-# Lightweight React Template for KAVIA
+# Simple Notes Frontend (React)
 
-This project provides a minimal React template with a clean, modern UI and minimal dependencies.
+A lightweight React app for creating, editing, and managing notes. It talks to a backend over REST and gracefully falls back to an in-browser mock store when the backend is unavailable.
 
 ## Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with KAVIA brand styling
-- **Fast**: Minimal dependencies for quick loading times
-- **Simple**: Easy to understand and modify
+- List notes with quick previews
+- Create new notes
+- Edit title and content
+- Delete notes with confirmation
+- Search notes
+- Light/Dark theme toggle
+- Mock fallback: works fully offline with localStorage
+- Accessible controls and keyboard-friendly
 
 ## Getting Started
 
-In the project directory, you can run:
+Install dependencies and run:
 
-### `npm start`
+- `npm start` — start dev server
+- `npm test` — run tests
+- `npm run build` — production build
 
-Runs the app in development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open http://localhost:3000 to use the app.
 
-### `npm test`
+## Backend Integration
 
-Launches the test runner in interactive watch mode.
+By default, the app uses an in-browser mock if the backend is not reachable. To connect to a backend, set the base URL:
 
-### `npm run build`
+1. Copy `.env.example` to `.env`:
+   ```
+   REACT_APP_NOTES_API_URL=http://localhost:8000
+   ```
+2. Ensure the backend exposes these endpoints:
+   - GET `/notes` -> returns array of notes
+   - POST `/notes` -> accepts `{ title, content }`, returns created note
+   - PUT `/notes/:id` -> accepts `{ title, content }`, returns updated note
+   - DELETE `/notes/:id` -> returns 200 on success
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Note: Do not commit your `.env` with secrets. The variable is read at build time.
 
-## Customization
+## Data Model
 
-### Colors
-
-The main brand colors are defined as CSS variables in `src/App.css`:
-
-```css
-:root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
+A note has:
+```json
+{
+  "id": "string",
+  "title": "string",
+  "content": "string",
+  "createdAt": "ISO string",
+  "updatedAt": "ISO string"
 }
 ```
 
-### Components
+## Project Structure
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+- `src/services/api.js` — API client with mock fallback
+- `src/components/NotesList.js` — list of notes
+- `src/components/NoteEditor.js` — editor UI
+- `src/utils/format.js` — formatting helpers
+- `src/App.js` — root UI and state
 
-Common components include:
-- Buttons (`.btn`, `.btn-large`)
-- Container (`.container`)
-- Navigation (`.navbar`)
-- Typography (`.title`, `.subtitle`, `.description`)
+## License
 
-## Learn More
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT
